@@ -1,7 +1,7 @@
 'use strict';
 import async from 'async';
 import fetch from 'node-fetch';
-import { isNullOrUndefined } from 'util/util.js';
+import { isNullOrUndefined, log as utilLog } from 'util/util.js';
 // import Product, { create, getAll, findSearch, QryPnStock, QryKuStock, unbound, unbound_flds_ab, updateById_flds_b, updateByParams, removeParams, findById, findByPn, findByOrdersName, updateById, remove, removeAll } from '../models/product.model.js';
 import Product from '../models/product.model.js';
 // const RFID_in_flds_ab = require('../models/rfid_in_flds_ab.model.js');
@@ -17,9 +17,12 @@ import { join } from 'path';
 import { stat as _stat, writeFileSync } from 'fs';
 // import { stock_input, stock_output, sysImport } from '../models/stock_action.model.js';
 
+// test code.
+// utilLog("TTTTTTTAAAAAA %s  %s",'YYYYY' ,'UUUUUU');
+
 // import csvToJSON from 'csvtojson';
 // import { json2csv } from 'json-2-csv';
-// import deepClone from '../until/deepClone.js';
+// import deepClone from '../util/deepClone.js';
 
 // Logger.info('//*********************** product.controller.js start..... *******************// ');
 
