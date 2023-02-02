@@ -11,12 +11,17 @@
     "@babel/cli": "^7.20.7",
     "@babel/core": "^7.20.12",
     "@babel/preset-env": "^7.20.2",
+    "async": "^3.2.4",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "^4.18.2",
+    "log4js": "^6.7.1",
     "morgan": "~1.9.1",
+    "mysql": "^2.18.1",
+    "node-fetch": "^2.6.9",
     "nodemon": "^2.0.20",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "util": "^0.12.5"
   },
   "devDependencies": {
     "jest": "^29.4.1",
@@ -54,6 +59,7 @@
     "transpile": "babel ./server --out-dir dist-server",
     "clean": "rimraf dist-server",
     "watch:dev": "nodemon",
+    "watch:dev_linux": "nodemon",
     "test": "jest"
   }
 }
