@@ -1,4 +1,3 @@
-
 import { Router } from 'express';
 const router = Router();
 
@@ -19,7 +18,7 @@ router.use(function(req, res, next) {
 
 // http://192.168.248.34:3000/catalog/ test --------------------------------------------------------------
 // Create a new Tutorial
-// router.post("/", tutorials.create);
+router.post("/", tutorials.create);
 
 // Retrieve all Tutorials
 router.get("/", tutorials.findAll);
@@ -28,13 +27,13 @@ router.get("/", tutorials.findAll);
 // router.get("/published", tutorials.findAllPublished);
 
 // // Retrieve a single Tutorial with id
-// router.get("/:id", tutorials.findOne);
+router.get("/:id", tutorials.findOne);
 
 // // Update a Tutorial with id
-// router.put("/:id", tutorials.update);
+router.put("/:id", tutorials.update);
 
 // // Delete a Tutorial with id
-// router.delete("/:id", tutorials.delete);
+router.delete("/:id", tutorials.delete);
 
 // // Delete all Tutorials
 // router.delete("/", tutorials.deleteAll);

@@ -1,5 +1,5 @@
 'use strict';
-// import Tutorial from "../models/tutorial.model.js";
+import Tutorial from "../models/tutorial.model.js";
 
 // Create and Save a new Tutorial
 export function create(req, res) {
@@ -39,24 +39,50 @@ export function create(req, res) {
 }
 
 // Retrieve all Tutorials from the database (with condition).
-export function findAll(req, res) {
+export async function findAll(req, res) {
   const title = req.query.title;
   console.log('tutorial.controller findAll query = %s', req.query);
   console.log('findAll body = %s', req.body);
   console.log('findAll params = %s', req.params);
-  // Tutorial.getAll(title, (err, data) => {
-  //   if (err)
-  //     res.status(500).send({
-  //       message:
-  //         err.message || "Some error occurred while retrieving tutorials."
-  //     });
-  //   else res.send(data);
-  // });
-  // res.send(req);
-  let msg = {
-    message: req.query
-  };
-  res.json(msg);
+
+  let table = `${global.userConfig.flds_comp}.rfid_ui_flds_a`;
+  // 跨不同資料庫+table, #RFID.資料庫代號=公司代號
+  console.log('table: %s', table);
+  try {
+    const result = Tutorial.getAll(table);
+    console.log('result');
+    console.log(result);
+    let msgret = {
+      code: 200,
+      msg: `product  find lists.`,
+      data: result
+    };
+    res.json(msgret);
+  } catch (error) {
+    // console.log(error.code);
+    res.status(500);
+    let msgret = {
+      code: error.errno,
+      msg: error.code
+      // data: error
+    };
+    res.json(msgret);
+    // Logger.info('msgret = %s', msgret);
+  }
+
+  // // Tutorial.getAll(title, (err, data) => {
+  // //   if (err)
+  // //     res.status(500).send({
+  // //       message:
+  // //         err.message || "Some error occurred while retrieving tutorials."
+  // //     });
+  // //   else res.send(data);
+  // // });
+  // // res.send(req);
+  // let msg = {
+  //   message: req.query
+  // };
+  // res.json(msg);
 }
 
 // Find a single Tutorial by Id

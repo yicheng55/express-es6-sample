@@ -46,16 +46,18 @@ Tutorial.getAll = (title, result) => {
     query += ` WHERE title LIKE '%${title}%'`;
   }
 
-  sql.query(query, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
+  console.log("query:", query);
+  return query;
+  // sql.query(query, (err, res) => {
+  //   if (err) {
+  //     console.log("error: ", err);
+  //     result(null, err);
+  //     return;
+  //   }
 
-    console.log("tutorials: ", res);
-    result(null, res);
-  });
+  //   console.log("tutorials: ", res);
+  //   result(null, res);
+  // });
 };
 
 Tutorial.getAllPublished = result => {
