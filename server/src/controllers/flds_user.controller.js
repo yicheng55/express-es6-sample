@@ -4,6 +4,7 @@ import { isNullOrUndefined } from 'util/util.js';
 import Flds_user from '../models/flds_user.model.js';
 // import { Controllerlogger as Logger } from '../comm/logger.js';
 import { Controllerlogger as Logger } from '../comm/logger.js';
+import { logErr as LogErr } from '../comm/logger';
 
 // Create and Save a new Flds_user
 export const create = async function(req, res){
@@ -56,7 +57,13 @@ export const create = async function(req, res){
       // data: error
     };
     res.json(msgret);
-    // Logger.info('msgret = %s', msgret);
+    Logger.info('msgret = %s', JSON.stringify(msgret));
+
+    let logerfunc = `export const create()`;
+    let logermsg = `${JSON.stringify(msgret)}`;
+    LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+    // LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerrfunc, logerrmsg);
+
   }
 
 }
@@ -171,7 +178,8 @@ export const findAll = async (req, res) => {
         data: result
       };
       res.json(msgret);
-      Logger.info('msgret = %s', msgret);
+      // Logger.info('msgret = %s', JSON.stringify(msgret));
+      // Logger.info('msgret = %s', msgret);
 
   } catch (error) {
     // console.log(error.code);
@@ -183,7 +191,13 @@ export const findAll = async (req, res) => {
       // data: error
     };
     res.json(msgret);
-    Logger.info('msgret = %s', msgret);
+    Logger.info('msgret = %s', JSON.stringify(msgret));
+    // Logger.info('msgret = %s', msgret);
+
+    let logerfunc = `export const findOne()`;
+    let logermsg = `${JSON.stringify(msgret)}`;
+    LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+
   }
 }
 
@@ -224,7 +238,13 @@ export const update = async (req, res) => {
 
         res.status(500);
         res.json(msgret);
-        Logger.info('msgret = %s', msgret);
+        Logger.info('msgret = %s', JSON.stringify(msgret));
+        // Logger.info('msgret = %s', msgret);
+
+        let logerfunc = `export const update()`;
+        let logermsg = `${JSON.stringify(msgret)}`;
+        LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+
       }
       else
       {
@@ -246,7 +266,13 @@ export const update = async (req, res) => {
       // data: error
     };
     res.json(msgret);
+    Logger.info('msgret = %s', JSON.stringify(msgret));
     // Logger.info('msgret = %s', msgret);
+
+    let logerfunc = `export const create()`;
+    let logermsg = `${JSON.stringify(msgret)}`;
+    LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+
   }
 }
 
@@ -276,7 +302,13 @@ export const update = async (req, res) => {
 
       res.status(500);
       res.json(msgret);
+      Logger.info('msgret = %s', JSON.stringify(msgret));
       // Logger.info('msgret = %s', msgret);
+
+      let logerfunc = `export const deleteID()`;
+      let logermsg = `${JSON.stringify(msgret)}`;
+      LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+
     }
     else
     {
@@ -298,7 +330,13 @@ export const update = async (req, res) => {
       // data: error
     };
     res.json(msgret);
+    Logger.info('msgret = %s', JSON.stringify(msgret));
     // Logger.info('msgret = %s', msgret);
+
+    let logerfunc = `export const create()`;
+    let logermsg = `${JSON.stringify(msgret)}`;
+    LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+
   }
 
 }
@@ -343,7 +381,13 @@ export const update = async (req, res) => {
       // data: error
     };
     res.json(msgret);
+    Logger.info('msgret = %s', JSON.stringify(msgret));
     // Logger.info('msgret = %s', msgret);
+
+    let logerfunc = `export const deleteAll()`;
+    let logermsg = `${JSON.stringify(msgret)}`;
+    LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+
   }
 
 }
