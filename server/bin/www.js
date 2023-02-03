@@ -4,9 +4,31 @@
  * Module dependencies.
  */
 
- import app from '../app';
- import debugLib from 'debug';
- import http from 'http';
+import app from '../app';
+import debugLib from 'debug';
+import http from 'http';
+import { spawn } from 'child_process';
+import { join } from 'path';
+
+// import rfidhandle from '../rfidhandle.js';
+const rfidp = join(__dirname, '../rfidhandle.js');
+
+//2nd Reader
+const AL510data = spawn('node', [rfidp]);
+
+AL510data.stdout.on('data', (data) => {
+    console.log(data.toString());
+});
+
+AL510data.stderr.on('data', (data) => {
+    console.error(`grep 的 stderr: ${data}`);
+});
+
+AL510data.on('close', (code) => {
+    if (code !== 0) {
+        console.log(`rawdatadb.js 进程退出，退出码 ${code}`);
+    }
+});
 
 var debug = debugLib('myapp:server');
 
