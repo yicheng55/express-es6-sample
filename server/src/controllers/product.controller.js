@@ -25,7 +25,7 @@ import { stat as _stat, writeFileSync } from 'fs';
 // import deepClone from '../util/deepClone.js';
 
 // Logger.info('//*********************** product.controller.js start..... *******************// ');
-
+let Flds_table = 'rfid_ui_flds_a';
 // Create and Save a new Product
 export const create = async function(req, res) {
   // Validate request
@@ -92,8 +92,9 @@ export const create = async function(req, res) {
     let uidstr = req.body.product_no + ((req.body.lot_no === null) ? '' : req.body.lot_no)  + req.body.warehouse_type + req.body.storage_location;
     product.uid = uidstr;
 
-    let Flds_comp = global.userConfig.flds_comp;
-    const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
+    const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
+    // let Flds_comp = global.userConfig.flds_comp;
+    // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
     // // 如果 req.body.ui_quantity === undefined 則預設為 0
     // product.ui_quantity = req.body.ui_quantity === undefined ?  0 : req.body.ui_quantity;
     // if( !(isNullOrUndefined(req.body.ui_check_state)) ){
@@ -2374,8 +2375,9 @@ export const findByPn = async function(req, res) {
   console.log('userConfig:');
   console.log( global.userConfig);
   try {
-    let Flds_comp = global.userConfig.flds_comp;
-    const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
+    const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
+    // let Flds_comp = global.userConfig.flds_comp;
+    // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
     const result = await Product.findByPn(req.params.id, TABLE_NAME);
     console.log('result:');
     console.log(result);
@@ -2559,10 +2561,11 @@ export const findUpdate = async function(req, res) {
     product.c_storage_location = isNullOrUndefined(req.body.c_storage_location) ?  '' : req.body.c_storage_location;
 
     try {
-      let Flds_comp = global.userConfig.flds_comp;
-      // const TABLE_NAME = Flds_comp+'.rfid_stock_flds_ab';
-      // const TABLE_NAME = Flds_comp+'.rfid_in_flds_abc';
-      const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
+      const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
+      // let Flds_comp = global.userConfig.flds_comp;
+      // // const TABLE_NAME = Flds_comp+'.rfid_stock_flds_ab';
+      // // const TABLE_NAME = Flds_comp+'.rfid_in_flds_abc';
+      // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
       const params = {
         uid : product.uid,
         order_no : product.order_no,
@@ -2620,8 +2623,9 @@ export const findByOrdersName = async function(req, res) {
     console.log('userConfig:');
     console.log( global.userConfig);
     try {
-      let Flds_comp = global.userConfig.flds_comp;
-      const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
+      const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
+      // let Flds_comp = global.userConfig.flds_comp;
+      // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
       const result = await Product.findByOrdersName(req.params.id, TABLE_NAME);
       console.log('result:');
       console.log(result);
@@ -2729,8 +2733,9 @@ export const update = async function(req, res) {
     // Logger.info('product = %s', product);
     // console.log(product);
 
-    let Flds_comp = global.userConfig.flds_comp;
-    const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
+    const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
+    // let Flds_comp = global.userConfig.flds_comp;
+    // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
     const result = await Product.updateById((req.params.id), product, TABLE_NAME);
     // const result = await Product.updateById((product.uid), product, TABLE_NAME);
     // const result = await Product.updateByParams((product.uid), product, TABLE_NAME);
@@ -2780,8 +2785,9 @@ export const findDelete = async function(req, res) {
   console.log('findDelete body = %s', req.body);
   console.log('findDelete params = %s', req.params);
   try {
-    let Flds_comp = global.userConfig.flds_comp;
-    let TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
+    const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
+    // let Flds_comp = global.userConfig.flds_comp;
+    // let TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
     let result1 = await removeParams(req.body, TABLE_NAME);
     console.log(result1);
 
@@ -2875,8 +2881,9 @@ export const deleteID = async function(req, res) {
   console.log('delete body = %s', req.body);
   console.log('delete params = %s', req.params);
   try {
-    let Flds_comp = global.userConfig.flds_comp;
-    const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
+    const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
+    // let Flds_comp = global.userConfig.flds_comp;
+    // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
     const result1 = await Product.remove(req.params.id, TABLE_NAME);
     // const result = await Product.findByPn(req.params.id);
     // console.log('result1:');

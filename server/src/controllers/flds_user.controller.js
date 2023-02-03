@@ -6,6 +6,7 @@ import Flds_user from '../models/flds_user.model.js';
 import { Controllerlogger as Logger } from '../comm/logger.js';
 import { logErr as LogErr } from '../comm/logger';
 
+let Flds_table = 'flds_user';
 // Create and Save a new Flds_user
 export const create = async function(req, res){
   // Validate request
@@ -32,8 +33,8 @@ export const create = async function(req, res){
     });
     console.log('Flds_user = %s', flds_user);
 
-    let Flds_comp = global.userConfig.flds_comp;
-    const TABLE_NAME = Flds_comp+'.flds_user';
+    // let Flds_comp = global.userConfig.flds_comp;
+    const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
 
       // 第二種方式同步語法
       const result2 = await Flds_user.create(flds_user, TABLE_NAME);
@@ -83,9 +84,14 @@ export const findAll = async (req, res) => {
   // console.log(promise1);
   // // res.json(promise1);
 
+  // let table1 = `${global.userConfig.flds_comp}.${Flds_table}`;
+  // // 跨不同資料庫+table, #RFID.資料庫代號=公司代號
+  // console.log('table1: %s', table1);
+
   // table = 'Flds_user_tables';
-  let table = `${global.userConfig.flds_comp}.flds_user`;
+  // let table = `${global.userConfig.flds_comp}.flds_user`;
   // 跨不同資料庫+table, #RFID.資料庫代號=公司代號
+  let table = `${global.userConfig.flds_comp}.${Flds_table}`;
   console.log('table: %s', table);
   const promise2 = await Flds_user.getAll(table);
   console.log('promise2');
@@ -115,8 +121,9 @@ export const findAll = async (req, res) => {
   // // res.json(promise1);
   try {
     // table = 'Flds_user_tables';
-    let table = `${global.userConfig.flds_comp}.flds_user`;
+    // let table = `${global.userConfig.flds_comp}.flds_user`;
     // 跨不同資料庫+table, #RFID.資料庫代號=公司代號
+    let table = `${global.userConfig.flds_comp}.${Flds_table}`;
     console.log('table: %s', table);
     const result = await Flds_user.findSearch(table, req.query);
     console.log('result');
@@ -163,8 +170,8 @@ export const findAll = async (req, res) => {
   console.log('Flds_user findOne body = %s', req.body);
   console.log('Flds_user findOne params = %s', req.params);
   // JSON.stringify(shelfrecord)
-  let Flds_comp = global.userConfig.flds_comp;
-  const TABLE_NAME = Flds_comp+'.flds_user';
+  // let Flds_comp = global.userConfig.flds_comp;
+  const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
 
   try {
       let result;
@@ -222,8 +229,8 @@ export const update = async (req, res) => {
       // Logger.info('flds_user = %s', flds_user);
 
       // console.log(this);
-      let Flds_comp = global.userConfig.flds_comp;
-      const TABLE_NAME = Flds_comp+'.flds_user';
+      // let Flds_comp = global.userConfig.flds_comp;
+      const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
       const result = await Flds_user.updateById((req.params.id), flds_user, TABLE_NAME);
       console.log(result);
 
@@ -285,8 +292,8 @@ export const update = async (req, res) => {
   // JSON.stringify(req.params.id)
 
   try {
-    let Flds_comp = global.userConfig.flds_comp;
-    const TABLE_NAME = Flds_comp+'.flds_user';
+    // let Flds_comp = global.userConfig.flds_comp;
+    const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
     const result1 = await Flds_user.remove(req.params.id, TABLE_NAME);
     // const result = await Product.findByPn(req.params.id);
     // console.log('result1:');
@@ -350,8 +357,8 @@ export const update = async (req, res) => {
 
   try {
 
-    let Flds_comp = global.userConfig.flds_comp;
-    const TABLE_NAME = Flds_comp+'.flds_user';
+    // let Flds_comp = global.userConfig.flds_comp;
+    const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
     const result1 = await Flds_user.removeAll(TABLE_NAME);
     console.log(result1);
 
