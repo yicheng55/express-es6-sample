@@ -27,7 +27,7 @@ const GPIOdata = require('./src/models/gpiodata.js');
 // Synchronously Check if a File Exists
 const Fs = require('fs');
 const Path = require('path');
-let path = Path.join(__dirname, "./log/RFIDAtag.log");
+let path = Path.join(__dirname, "../log/RFIDAtag.log");
 let res = Fs.existsSync(path);
 console.log(path + ' == ' + res);
 
@@ -58,7 +58,7 @@ if (res === true) {
 
 }
 
-path = Path.join(__dirname, "./log/al510lowdata.log");
+path = Path.join(__dirname, "../log/al510lowdata.log");
 res = Fs.existsSync(path);
 console.log(path + ' == ' + res);
 
