@@ -25,10 +25,12 @@ const GPIOdata = require('./src/models/gpiodata.js');
 // console.log(filename);
 
 // Synchronously Check if a File Exists
-const Fs = require('fs');
+// const Fs = require('fs');
 const Path = require('path');
 let path = Path.join(__dirname, "../log/RFIDAtag.log");
-let res = Fs.existsSync(path);
+let res = fs.existsSync(path);
+console.log( __dirname );
+console.log( __filename );
 console.log(path + ' == ' + res);
 
 if (res === true) {
@@ -59,7 +61,7 @@ if (res === true) {
 }
 
 path = Path.join(__dirname, "../log/al510lowdata.log");
-res = Fs.existsSync(path);
+res = fs.existsSync(path);
 console.log(path + ' == ' + res);
 
 if (res === true) {
