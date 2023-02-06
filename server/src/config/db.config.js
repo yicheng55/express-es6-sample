@@ -2,7 +2,7 @@
 export const HOST = "localhost";
 export const USER = "root";
 export const PASSWORD = "";
-export const DB = "abba_dev04";
+export const DB = "micro_dev01";
 // module.exports = {
 //     HOST: "localhost",
 //     USER: "root",

@@ -8,8 +8,8 @@ class Flds_user {
   constructor(user) {
     this.users_id = user.users_id;
     this.name = user.name;
-    this.compid = user.compid;
     this.deptid = user.deptid;
+    this.state = user.state;
     this.password = user.password;
   }
   static create(newFlds_user, TABLE_NAME) {

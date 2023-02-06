@@ -27,7 +27,7 @@ export const create = async function(req, res){
     const flds_user = new Flds_user({
       users_id : req.body.users_id,
       name : req.body.name,
-      compid: req.body.compid,
+      state: req.body.state,
       deptid : req.body.deptid,
       password : req.body.password,
     });
@@ -235,15 +235,11 @@ export const update = async (req, res) => {
       const flds_user = new Flds_user({
         users_id : req.params.id,
         name : req.body.name,
-        compid: req.body.compid,
+        state: req.body.state,
         deptid : req.body.deptid,
         password : req.body.password,
       });
 
-      // console.log('flds_user = %s', flds_user);
-      // Logger.info('flds_user = %s', flds_user);
-
-      // console.log(this);
       // let Flds_comp = global.userConfig.flds_comp;
       const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
       const result = await Flds_user.updateById((req.params.id), flds_user, TABLE_NAME);
