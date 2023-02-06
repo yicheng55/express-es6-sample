@@ -17,27 +17,22 @@ router.use(function(req, res, next) {
 
 // Retrieve all flds_user
 router.get("/", flds_user.findAll);
-// router.post("/", flds_user.findAll);
-router.post("/", flds_user.create);
-
 router.get("/findsearch", flds_user.findSearch);
-
-// // Retrieve all flds_user
-// router.get("/create", flds_user.findAll);
-// // Create a new Location
-// router.post("/create", flds_user.create);
 
 // Retrieve a single Location with id
 router.get("/:id", flds_user.findOne);
 // router.post("/:id", flds_user.create);
 
-// Update a Location with id
+// Create a new user
+router.post("/", flds_user.create);
+
+// Update a user with id
 router.put("/:id", flds_user.update);
 
-// Delete a Location with id
+// Delete a user with id
 router.delete("/:id", flds_user.deleteID);
 
-// Delete all Location
+// Delete all user
 // router.delete("/", flds_user.deleteAll);
 
 export default router;

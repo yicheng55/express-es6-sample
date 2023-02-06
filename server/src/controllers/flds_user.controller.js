@@ -179,14 +179,29 @@ export const findAll = async (req, res) => {
       console.log('result');
       console.log(result);
 
-      let msgret = {
-        code: 200,
-        msg: `Flds_user findOne:  ${req.params.id} successfully.`,
-        data: result
-      };
-      res.json(msgret);
-      // Logger.info('msgret = %s', JSON.stringify(msgret));
-      // Logger.info('msgret = %s', msgret);
+      if( isNullOrUndefined(result[0]) )
+      {
+        let msgret = {
+          code: 204,
+          msg: `Not found users_id: ${req.params.id}`
+          // data: data
+        };
+
+        // 請求已成功處理，但未返回任何內容
+        res.status(200);
+        res.json(msgret);
+        Logger.info('msgret = %s', msgret);
+      }
+      else{
+        let msgret = {
+          code: 200,
+          msg: `Flds_user findOne:  ${req.params.id} successfully.`,
+          data: result
+        };
+        res.json(msgret);
+        // Logger.info('msgret = %s', JSON.stringify(msgret));
+        // Logger.info('msgret = %s', msgret);
+      }
 
   } catch (error) {
     // console.log(error.code);
