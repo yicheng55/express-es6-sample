@@ -61,7 +61,7 @@ app.use(express.json());
 
 //middleware
 app.use('/', indexRouter);
-app.use('/catalog/user', flds_userRouter);  // Add product routes to middleware chain.
+app.use('/catalog/users', flds_userRouter);  // Add product routes to middleware chain.
 // // app.use('/catalog/flds_bind', flds_bindRouter);  // Add product routes to middleware chain.
 // app.use('/catalog/location', locationRouter);  // Add location routes to middleware chain.
 app.use('/catalog/product', productRouter);  // Add product routes to middleware chain.
