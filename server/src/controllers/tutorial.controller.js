@@ -1,4 +1,6 @@
 'use strict';
+import { Controllerlogger as Logger } from '../comm/logger.js';
+import { logErr as LogErr } from '../comm/logger.js';
 import Tutorial from "../models/tutorial.model.js";
 
 // Create and Save a new Tutorial
@@ -104,10 +106,15 @@ export function findOne(req, res) {
   //     }
   //   } else res.send(data);
   // });
-  let msg = {
-    message: req.query
+  let msgret = {
+    code: 500,
+    msg: `Not found product_no: ${req.params.id}`
+    // data: data
   };
-  res.json(msg);
+
+  res.status(500);
+  res.json(msgret);
+  Logger.info('msgret = %s', JSON.stringify(msgret));
 }
 
 // find all published Tutorials
@@ -140,30 +147,19 @@ export function update(req, res) {
     });
   }
 
-
-
-  let msg = {
-    message: req.query
+  let msgret = {
+    code: 500,
+    msg: `Not found product_no: ${req.params.id}`
+    // data: data
   };
-  res.json(msg);
 
-  // Tutorial.updateById(
-  //   req.params.id,
-  //   new Tutorial(req.body),
-  //   (err, data) => {
-  //     if (err) {
-  //       if (err.kind === "not_found") {
-  //         res.status(404).send({
-  //           message: `Not found Tutorial with id ${req.params.id}.`
-  //         });
-  //       } else {
-  //         res.status(500).send({
-  //           message: "Error updating Tutorial with id " + req.params.id
-  //         });
-  //       }
-  //     } else res.send(data);
-  //   }
-  // );
+  res.status(500);
+  res.json(msgret);
+  Logger.info('msgret = %s', JSON.stringify(msgret));
+
+  let logerfunc = `export function update(req, res) `;
+  let logermsg = `${JSON.stringify(msgret)}`;
+  LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
 }
 
 // Delete a Tutorial with the specified id in the request

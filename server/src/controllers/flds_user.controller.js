@@ -4,7 +4,7 @@ import { isNullOrUndefined } from 'util/util.js';
 import Flds_user from '../models/flds_user.model.js';
 // import { Controllerlogger as Logger } from '../comm/logger.js';
 import { Controllerlogger as Logger } from '../comm/logger.js';
-import { logErr as LogErr } from '../comm/logger';
+import { logErr as LogErr } from '../comm/logger.js';
 
 let Flds_table = 'flds_user';
 // Create and Save a new Flds_user

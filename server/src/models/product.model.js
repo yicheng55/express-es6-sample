@@ -5,36 +5,22 @@ import sql  from "./db.js";
 // constructor
 class Product {
   constructor(product) {
-    this.uid = product.uid;
-    this.flds_comp = product.flds_comp;
-    this.order_no = product.order_no;
-    this.serial_no = product.serial_no;
-
-    this.warehouse_type = product.warehouse_type;
-    this.storage_location = product.storage_location;
-    this.lot_no = product.lot_no;
-
     this.product_no = product.product_no;
     this.product_name = product.product_name;
+    this.classift = product.classift;
     this.specification = product.specification;
-
-    this.quantity = product.quantity;
     this.unit = product.unit;
-    this.packing_quantity = product.packing_quantity;
+    this.remake = product.remake;
 
-    this.packing_unit = product.packing_unit;
     this.attribute1 = product.attribute1;
     this.attribute2 = product.attribute2;
-
     this.attribute3 = product.attribute3;
     this.attribute4 = product.attribute4;
-    this.attribute5 = product.attribute5;
+    this.reserve = product.reserve;
   }
+
   static create(newproduct, TABLE_NAME) {
     return new Promise((resolve, reject) => {
-      // let Flds_comp = global.userConfig.flds_comp;
-      // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
-      // sql.query("INSERT INTO products SET ?", newproduct, (err, res) => {
       let query = `INSERT INTO ${TABLE_NAME} SET ?`;
       console.log("query:", query);
       sql.query(query, newproduct, (err, res) => {
@@ -42,14 +28,11 @@ class Product {
           console.log("error: ", err);
           return reject(err);
         }
-
-        // console.log(res)
-        // console.log("created product: ", { ...newproduct });
         return resolve({ newproduct });
-        // result(null, { id: res.insertId, ...newproduct });
       });
     });
   }
+
   static replace(newproduct, TABLE_NAME) {
     return new Promise((resolve, reject) => {
       // sql.query(`REPLACE INTO ${TABLE_NAME} SET ?`, newproduct, (err, res) => {
@@ -69,7 +52,7 @@ class Product {
       // let Flds_comp = global.userConfig.flds_comp;
       // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
       // let query = ("SELECT * FROM products WHERE uid = " + id);
-      let query = `SELECT * FROM ${TABLE_NAME} WHERE uid = '${id}'`;
+      let query = `SELECT * FROM ${TABLE_NAME} WHERE product_no = '${id}'`;
       console.log("query:", query);
 
       sql.query(query, (err, res) => {
@@ -505,7 +488,7 @@ class Product {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
       // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
-      let query = `UPDATE ${TABLE_NAME} SET ?  WHERE uid = '${id}'`;
+      let query = `UPDATE ${TABLE_NAME} SET ?  WHERE product_no = '${id}'`;
       console.log("query:", query);
       sql.query(query, product, (err, res) => {
         if (err) {
@@ -675,7 +658,7 @@ class Product {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
       // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
-      let query = `DELETE FROM ${TABLE_NAME} WHERE uid = '${id}'`;
+      let query = `DELETE FROM ${TABLE_NAME} WHERE product_no = '${id}'`;
       console.log("query:", query);
       sql.query(query, (err, res) => {
         if (err) {
