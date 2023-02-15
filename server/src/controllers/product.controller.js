@@ -5,12 +5,13 @@ import { isNullOrUndefined, log as utilLog } from 'util/util.js';
 import Product from '../models/product.model.js';
 import { Controllerlogger as Logger } from '../comm/logger.js';
 import { logErr as LogErr } from '../comm/logger.js';
-import { join } from 'path';
-import { stat as _stat, writeFileSync } from 'fs';
+import formatDate from '../util/utilFunction.js';
+import {service}  from '../config/user.def.js';
 
 // test code.
 // utilLog("TTTTTTTAAAAAA %s  %s",'YYYYY' ,'UUUUUU');
 
+// let Flds_table = 'flds_dept';
 let Flds_table = 'products';
 // Create and Save a new Product
 export const create = async function(req, res) {
@@ -20,9 +21,10 @@ export const create = async function(req, res) {
 
   if (!req.body) {
     let msgret = {
+      service: service.web,
       code: 400,
-      msg: `Content can not be empty!`
-      // data: data
+      msg: "Content can not be empty!",
+      data: []
     };
     res.status(400);
     res.json(msgret);
@@ -50,13 +52,14 @@ export const create = async function(req, res) {
     console.log('product = %s', product);
 
     const result2 = await Product.create(product, TABLE_NAME);
-    console.log('result2');
-    console.log(result2);
+    // console.log('result2');
+    // console.log(result2);
 
     let msgret = {
+      service: service.web,
       code: 200,
-      msg: `product creat successfully  product_no: ${product.product_no}`
-      // data: data
+      msg: `product creat successfully  product_no: ${product.product_no}`,
+      data: []
     };
     res.json(msgret);
 
@@ -64,19 +67,18 @@ export const create = async function(req, res) {
     // console.log(error.code);
     res.status(500);
     let msgret = {
+      service: service.db,
       code: error.errno,
       msg: error.code,
-      sqlMessage: error.sqlMessage
-      // data: error
+      data:[{msg: error.sqlMessage}]
     };
     res.json(msgret);
     Logger.info('msgret = %s', JSON.stringify(msgret));
 
-    let logerfunc = `export const findOne()`;
+    let logerfunc = `export const create()`;
     let logermsg = `${JSON.stringify(msgret)}`;
     LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
   }
-
 }
 
 // 同步功能實現 async/await/Promise .
@@ -89,25 +91,53 @@ export const findAll = async function(req, res) {
   const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
   console.log('TABLE_NAME: %s', TABLE_NAME);
   try {
-    const result = await Product.getAll(TABLE_NAME);
-    console.log('result');
-    console.log(result);
+    const result1 = await Product.getAll(TABLE_NAME);
+    // console.log('result');
+    // console.log(result1);
+    if(isNullOrUndefined(result1[0])){
+      let msgret = {
+        service: service.db,
+        code: 404,
+        msg: `Flds_user Not find list.`,
+        data: []
+      };
+      // 請求已成功處理，但未返回任何內容
+      res.status(200);
+      res.json(msgret);
+      Logger.info('msgret = %s', msgret);
+      return ;
+    }
+
+    const result = result1.map(function(row){
+      return Object.assign({}, row, { createtime: formatDate(row.createtime),  updatetime: formatDate(row.updatetime) });
+    });
+
+    res.status(200);
     let msgret = {
+      service: service.web,
       code: 200,
-      msg: `product  find lists.`,
+      msg: `product findAll lists.`,
       data: result
     };
     res.json(msgret);
+
   } catch (error) {
     // console.log(error.code);
     res.status(500);
     let msgret = {
+      service: service.db,
       code: error.errno,
-      msg: error.code
-      // data: error
+      msg: error.code,
+      data:[{msg: error.sqlMessage}]
     };
+
     res.json(msgret);
     Logger.info('msgret = %s', msgret);
+
+    let logerfunc = `export const findAll()`;
+    let logermsg = `${JSON.stringify(msgret)}`;
+    LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+
   }
 }
 
@@ -120,22 +150,31 @@ export const findSearch = async function(req, res) {
     const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
 
     console.log('TABLE_NAME: %s', TABLE_NAME);
-    const result = await Product.findSearch(TABLE_NAME, req.query);
-    console.log('result');
-    console.log(result);
+    const result1 = await Product.findSearch(TABLE_NAME, req.query);
+    // console.log('result1');
+    // console.log(result1);
     // res.json(promise2);
 
-    if(isNullOrUndefined(result[0])){
+    if(isNullOrUndefined(result1[0])){
       let msgret = {
-        code: 200,
+        service: service.db,
+        code: 404,
         msg: `Products Not find list.`,
-        // data: result
+        data: []
       };
+      res.status(200);
       res.json(msgret);
+      Logger.info('msgret = %s', msgret);
       return ;
     }
 
+    const result = result1.map(function(row){
+      return Object.assign({}, row, { createtime: formatDate(row.createtime),  updatetime: formatDate(row.updatetime) });
+    });
+
+    res.status(200);
     let msgret = {
+      service: service.web,
       code: 200,
       msg: `Products findSearch successfully.`,
       data: result
@@ -143,17 +182,21 @@ export const findSearch = async function(req, res) {
     res.json(msgret);
 
   } catch (error) {
-    console.log(error);
-    // console.log(result_LocationID);
     res.status(500);
     let msgret = {
-      code: 500,
-      msg: 'Products findSearch error.',
-      // sqlMessage: error.sqlMessage
-      // data: error
+      service: service.db,
+      code: error.errno,
+      msg: error.code,
+      data:[{msg: error.sqlMessage}]
     };
+
     res.json(msgret);
     Logger.info('msgret = %s', msgret);
+
+    let logerfunc = `export const findSearch()`;
+    let logermsg = `${JSON.stringify(msgret)}`;
+    LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+
   }
 
 }
@@ -163,70 +206,58 @@ export const findOne = async function(req, res) {
   console.log('findOne query = %s', req.query);
   console.log('findOne body = %s', req.body);
   console.log('findOne params = %s', req.params);
-  // JSON.stringify(shelfrecord)
-
-  // global.userConfig.reserve1 = req.params.id;
-  // console.log('userConfig:');
-  // console.log( global.userConfig);
-  // var me = arguments.callee.name;
-  // console.log( me );
-  // console.log( JSON.stringify(me));
-
-  // LogErr function test.
-  // let logerrfunc = 'product.controller.findOne()';
-  // let logerrmsg = 'testmsg....';
-  // LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerrfunc, logerrmsg);
 
   try {
-    // let Flds_comp = global.userConfig.flds_comp;
-    // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
+      // let Flds_comp = global.userConfig.flds_comp;
+      // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
 
-    const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
-    const result = await Product.findById(req.params.id, TABLE_NAME);
-    // const result = await Product.findByPn(req.params.id);
-    // console.log('result:');
-    // console.log(result);
-    // res.json(result[0]);
+      const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
+      const result1 = await Product.findById(req.params.id, TABLE_NAME);
 
-    // Test code.
-    // let orderData1=deepClone(result)
-    // console.log('orderData1:');
-    // console.log(orderData1[0]);
+      if( isNullOrUndefined(result1[0]) )
+      {
+        let msgret = {
+          service: service.db,
+          code: 404,
+          msg: `Not found product_no: ${req.params.id}`,
+          data: []
+        };
+        // 請求已成功處理，但未返回任何內容
+        res.status(200);
+        res.json(msgret);
+        Logger.info('msgret = %s', msgret);
+        return ;
+      }
 
-    // if(result.result === 'not_found')
-    if( isNullOrUndefined(result[0]) )
-    {
+      const result = result1.map(function(row){
+        return Object.assign({}, row, { createtime: formatDate(row.createtime),  updatetime: formatDate(row.updatetime) });
+      });
+      res.status(200);
       let msgret = {
-        code: 500,
-        msg: `Not found product_no: ${req.params.id}`
-        // data: data
-      };
-
-      res.status(500);
-      res.json(msgret);
-      Logger.info('msgret = %s', msgret);
-    }
-    else{
-
-      let msgret = {
+        service: service.web,
         code: 200,
         msg: `find  product successfully`,
         data: result
       };
       res.json(msgret);
-    }
 
   } catch (error) {
     // console.log(error.code);
     res.status(500);
     let msgret = {
+      service: service.db,
       code: error.errno,
       msg: error.code,
-      sqlMessage: error.sqlMessage
-      // data: error
+      data:[{msg: error.sqlMessage}]
     };
+
     res.json(msgret);
     Logger.info('msgret = %s', msgret);
+
+    let logerfunc = `export const findOne()`;
+    let logermsg = `${JSON.stringify(msgret)}`;
+    LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+
   }
 
 }
@@ -237,7 +268,7 @@ export const update = async function(req, res) {
   console.log('update body = %s', req.body);
   console.log('update params = %s', req.params);
   const product = new Product({
-    product_no : req.body.product_no,
+    product_no : req.params.id,
     product_name : req.body.product_name,
     classift : req.body.classift,
     specification : req.body.specification,
@@ -256,41 +287,53 @@ export const update = async function(req, res) {
     // let Flds_comp = global.userConfig.flds_comp;
     // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
     const result = await Product.updateById((req.params.id), product, TABLE_NAME);
-    console.log(result[0]);
+    // console.log(result[0]);
 
     // if(result.result === 'not_found')
     if( isNullOrUndefined(result[0]) )
     {
       let msgret = {
-        code: 500,
-        msg: `Not found uid: ${req.params.id}`
-        // data: data
+        service: service.db,
+        code: 404,
+        msg: `Not find product_no: ${product.product_no}.`,
+        data: []
       };
 
-      res.status(500);
+      res.status(200);
       res.json(msgret);
       Logger.info('msgret = %s', msgret);
+
+      let logerfunc = `export const update()`;
+      let logermsg = `${JSON.stringify(msgret)}`;
+      LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+      return ;
     }
-    else{
-      let msgret = {
-        code: 200,
-        msg: `Product updateById product_no: ${product.product_no} successfully.`,
-        // data: result[0]
-      };
-      res.json(msgret);
-    }
+
+    let msgret = {
+      service: service.web,
+      code: 200,
+      msg: `Product updateById product_no: ${product.product_no} successfully.`,
+      data: []
+    };
+    res.json(msgret);
+
 
   } catch (error) {
     // console.log(error.code);
     res.status(500);
     let msgret = {
+      service: service.db,
       code: error.errno,
       msg: error.code,
-      sqlMessage: error.sqlMessage
-      // data: error
+      data:[{msg: error.sqlMessage}]
     };
     res.json(msgret);
     Logger.info('msgret = %s', msgret);
+
+    let logerfunc = `export const update()`;
+    let logermsg = `${JSON.stringify(msgret)}`;
+    LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+
   }
 
 }
@@ -302,45 +345,53 @@ export const deleteID = async function(req, res) {
   console.log('delete params = %s', req.params);
   try {
     const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
-    // let Flds_comp = global.userConfig.flds_comp;
-    // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
     const result1 = await Product.remove(req.params.id, TABLE_NAME);
-    // const result = await Product.findByPn(req.params.id);
-    // console.log('result1:');
-    console.log(result1);
+    // console.log(result1);
 
     if( isNullOrUndefined(result1[0]) )
     {
       let msgret = {
-        code: 400,
-        msg: `Not found product_no: ${req.params.id}`
-        // data: data
+        service: service.db,
+        code: 404,
+        msg: `Delete not found product_no: ${req.params.id}`,
+        data: []
       };
 
-      res.status(400);
+      res.status(200);
       res.json(msgret);
-      Logger.info('msgret = %s', msgret);
+      Logger.info('msgret = %s', JSON.stringify(msgret));
+
+      let logerfunc = `export const deleteID()`;
+      let logermsg = `${JSON.stringify(msgret)}`;
+      LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+
     }
     else{
       let msgret = {
+        service: service.web,
         code: 200,
         msg: `deleteOne successfully product_no: ${req.params.id}`,
-        // data: result1
+        data: []
       };
       res.json(msgret);
     }
 
   } catch (error) {
-    // console.log(error.code);
     res.status(500);
     let msgret = {
+      service: service.db,
       code: error.errno,
       msg: error.code,
-      sqlMessage: error.sqlMessage
-      // data: error
+      data:[{msg: error.sqlMessage}]
     };
+
     res.json(msgret);
-    Logger.info('msgret = %s', msgret);
+    Logger.info('msgret = %s', JSON.stringify(msgret));
+
+    let logerfunc = `export const create()`;
+    let logermsg = `${JSON.stringify(msgret)}`;
+    LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+
   }
 
 }

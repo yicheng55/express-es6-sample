@@ -26,9 +26,9 @@ app.use(express.json());
 // console.log( __filename );
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/user', usersRouter);
 
-app.use('/catalog/users', flds_userRouter);  // Add product routes to middleware chain.
+app.use('/catalog/user', flds_userRouter);  // Add product routes to middleware chain.
 app.use('/catalog/product', productRouter);  // Add product routes to middleware chain.
 // 最後放'/catalog'才不會被攔截
 app.use('/catalog', catalogRouter);  // Add catalog routes to middleware chain.

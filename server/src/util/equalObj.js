@@ -15,4 +15,4 @@ function isEqual(obj1,obj2){
             }
             return true;
         }
-module.exports = isEqual
+export default isEqual

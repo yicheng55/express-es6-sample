@@ -6,7 +6,7 @@ import sql  from "./db.js";
 // constructor
 class Flds_user {
   constructor(user) {
-    this.users_id = user.users_id;
+    this.user_id = user.user_id;
     this.name = user.name;
     this.deptid = user.deptid;
     this.state = user.state;
@@ -31,8 +31,8 @@ class Flds_user {
   }
   static findById(id, TABLE_NAME) {
     return new Promise((resolve, reject) => {
-      // let query = ("SELECT * FROM Flds_users WHERE users_id = " + id);
-      let query = `SELECT * FROM ${TABLE_NAME} WHERE users_id = '${id}'`;
+      // let query = ("SELECT * FROM Flds_users WHERE user_id = " + id);
+      let query = `SELECT * FROM ${TABLE_NAME} WHERE user_id = '${id}'`;
       console.log("query:", query);
 
       sql.query(query, (err, res) => {
@@ -63,7 +63,8 @@ class Flds_user {
         return resolve(res);
       });
     });
-  }
+  };
+
   static findSearch(TABLE_NAME, params) {
     return new Promise((resolve, reject) => {
       console.log("params:", params);
@@ -72,9 +73,9 @@ class Flds_user {
 
       // 檢查參數長度Object.keys(params).length
       // console.log("query:", query, params, Object.keys(params).length);
-      if (params.users_id) {
-        query = query + `AND users_id LIKE '${params.users_id}%' `;
-        console.log("params.users_id:", params.users_id);
+      if (params.user_id) {
+        query = query + `AND user_id LIKE '${params.user_id}%' `;
+        console.log("params.user_id:", params.user_id);
       };
 
       if (params.deptid) {
@@ -92,7 +93,7 @@ class Flds_user {
         console.log("params.offset:", params.offset);
       };
 
-      // query = query + `ORDER BY ${TABLE_NAME}.users_id LIMIT 100 OFFSET 0 `;
+      // query = query + `ORDER BY ${TABLE_NAME}.user_id LIMIT 100 OFFSET 0 `;
       console.log("query: %s", query);
       sql.query(query, (err, res) => {
         if (err) {
@@ -102,11 +103,12 @@ class Flds_user {
       });
       // return resolve(query);
     });
-  }
+  };
+
   static updateById(id, Flds_user, TABLE_NAME) {
     return new Promise((resolve, reject) => {
 
-      let query = `UPDATE ${TABLE_NAME} SET ?  WHERE users_id = '${id}'`;
+      let query = `UPDATE ${TABLE_NAME} SET ?  WHERE user_id = '${id}'`;
       console.log("query:", query);
       sql.query(query, Flds_user, (err, res) => {
         if (err) {
@@ -130,7 +132,7 @@ class Flds_user {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
       // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
-      let query = `DELETE FROM ${TABLE_NAME} WHERE users_id = '${id}'`;
+      let query = `DELETE FROM ${TABLE_NAME} WHERE user_id = '${id}'`;
       console.log("query:", query);
       sql.query(query, (err, res) => {
         if (err) {

@@ -1,10 +1,15 @@
 'use strict';
 import async from 'async';
+import moment from 'moment';
 import { isNullOrUndefined } from 'util/util.js';
 import Flds_user from '../models/flds_user.model.js';
 // import { Controllerlogger as Logger } from '../comm/logger.js';
 import { Controllerlogger as Logger } from '../comm/logger.js';
 import { logErr as LogErr } from '../comm/logger.js';
+import formatDate from '../util/utilFunction.js';
+import {service, config02}  from '../config/user.def.js';
+// console.log(service);
+
 
 let Flds_table = 'flds_user';
 // Create and Save a new Flds_user
@@ -25,7 +30,7 @@ export const create = async function(req, res){
 
   try {
     const flds_user = new Flds_user({
-      users_id : req.body.users_id,
+      user_id : req.body.user_id,
       name : req.body.name,
       state: req.body.state,
       deptid : req.body.deptid,
@@ -42,9 +47,10 @@ export const create = async function(req, res){
       console.log(result2);
       // res.json(result2);
       let msgret = {
+        service: service.web,
         code: 200,
-        msg: `Flds_user creat successfully  users_id: ${result2.users_id}`,
-        data: result2
+        msg: `Flds_user creat successfully  user_id: ${result2.user_id}`,
+        data: []
       };
       res.json(msgret);
 
@@ -52,11 +58,12 @@ export const create = async function(req, res){
     // console.log(error.code);
     res.status(500);
     let msgret = {
+      service: service.db,
       code: error.errno,
       msg: error.code,
-      sqlMessage: error.sqlMessage
-      // data: error
+      data:[{msg: error.sqlMessage}]
     };
+
     res.json(msgret);
     Logger.info('msgret = %s', JSON.stringify(msgret));
 
@@ -93,23 +100,63 @@ export const findAll = async (req, res) => {
   // 跨不同資料庫+table, #RFID.資料庫代號=公司代號
   let table = `${global.userConfig.flds_comp}.${Flds_table}`;
   console.log('table: %s', table);
-  const promise2 = await Flds_user.getAll(table);
-  console.log('promise2');
-  console.log(promise2);
-  // res.json(promise2);
 
-  let msgret = {
-    code: 200,
-    msg: `flds_user findAll successfully....`,
-    data: promise2
-  };
-  res.json(msgret);
+  try {
+    const promise2 = await Flds_user.getAll(table);
+    // console.log('promise2');
+    // console.log(promise2);
+    // res.json(promise2);
+    if(isNullOrUndefined(promise2[0])){
+      res.status(200);
+      let msgret = {
+        service: service.db,
+        code: 404,
+        msg: `Flds_user Not find list.`,
+        data: []
+      };
+      res.json(msgret);
+      return ;
+    }
+
+    const result = promise2.map(function(row){
+      // return Object.assign({}, row, { createstamp: moment(row.createstamp).format('YYYY-MM-DD HH:mm:ss'),  updatetime: moment(row.updatetime).format('YYYY-MM-DD HH:mm:ss') });
+      return Object.assign({}, row, { createtime: formatDate(row.createtime),  updatetime: formatDate(row.updatetime) });
+    });
+
+    res.status(200);
+    let msgret = {
+      service: service.web,
+      code: 200,
+      msg: `flds_user findAll successfully....`,
+      data: result
+    };
+    res.json(msgret);
+    console.log(msgret);
+
+  } catch (error) {
+    // console.log(error.code);
+    res.status(500);
+    let msgret = {
+      service: service.db,
+      code: error.errno,
+      msg: error.code,
+      data:[{msg: error.sqlMessage}]
+    };
+
+    res.json(msgret);
+    Logger.info('msgret = %s', JSON.stringify(msgret));
+
+    let logerfunc = `export const findAll()`;
+    let logermsg = `${JSON.stringify(msgret)}`;
+    LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+    // LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerrfunc, logerrmsg);
+  }
 }
 
 
 // 同步功能實現 async/await/Promise .
 // export asyncfunction findSearch(req, res) {
-  export const findSearch = async function(req, res){
+export const findSearch = async function(req, res){
   console.log('findSearch query = %s', req.query);
   console.log('findSearch body = %s', req.body);
   console.log('findSearch params = %s', req.params);
@@ -125,22 +172,31 @@ export const findAll = async (req, res) => {
     // 跨不同資料庫+table, #RFID.資料庫代號=公司代號
     let table = `${global.userConfig.flds_comp}.${Flds_table}`;
     console.log('table: %s', table);
-    const result = await Flds_user.findSearch(table, req.query);
-    console.log('result');
-    console.log(result);
+    const result1 = await Flds_user.findSearch(table, req.query);
+    // const result1 = await Flds_user.getAll(table);
+    console.log('result1');
+    console.log(result1);
     // res.json(promise2);
 
-    if(isNullOrUndefined(result[0])){
+    if(isNullOrUndefined(result1[0])){
+      res.status(200);
       let msgret = {
-        code: 200,
+        service: service.db,
+        code: 404,
         msg: `Flds_user Not find list.`,
-        // data: result
+        data: []
       };
       res.json(msgret);
       return ;
     }
 
+    const result = result1.map(function(row){
+      // return Object.assign({}, row, { createstamp: moment(row.createstamp).format('YYYY-MM-DD HH:mm:ss'),  updatetime: moment(row.updatetime).format('YYYY-MM-DD HH:mm:ss') });
+      return Object.assign({}, row, { createtime: formatDate(row.createtime),  updatetime: formatDate(row.updatetime) });
+    });
+    res.status(200);
     let msgret = {
+      service: service.web,
       code: 200,
       msg: `Flds_user findSearch successfully.`,
       data: result
@@ -148,24 +204,30 @@ export const findAll = async (req, res) => {
     res.json(msgret);
 
   } catch (error) {
-    console.log(error);
-    // console.log(result_LocationID);
+
     res.status(500);
     let msgret = {
-      code: 500,
-      msg: 'findSearch error.',
-      // sqlMessage: error.sqlMessage
-      // data: error
+      service: service.db,
+      code: error.errno,
+      msg: error.code,
+      data:[{msg: error.sqlMessage}]
     };
+
     res.json(msgret);
+    Logger.info('msgret = %s', JSON.stringify(msgret));
     // Logger.info('msgret = %s', msgret);
+
+    let logerfunc = `export const findSearch()`;
+    let logermsg = `${JSON.stringify(msgret)}`;
+    LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+
   }
 
 }
 
 // Find a single Flds_user by Id
 // export asyncfunction findOne(req, res) {
-  export const findOne = async function(req, res){
+export const findOne = async function(req, res){
   console.log('Flds_user findOne query = %s', req.query);
   console.log('Flds_user findOne body = %s', req.body);
   console.log('Flds_user findOne params = %s', req.params);
@@ -174,43 +236,50 @@ export const findAll = async (req, res) => {
   const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
 
   try {
-      let result;
-      result = await Flds_user.findById(req.params.id, TABLE_NAME);
-      console.log('result');
-      console.log(result);
+      let result1 = await Flds_user.findById(req.params.id, TABLE_NAME);
+      // console.log('result');
+      // console.log(result);
 
-      if( isNullOrUndefined(result[0]) )
+      if( isNullOrUndefined(result1[0]) )
       {
         let msgret = {
-          code: 204,
-          msg: `Not found users_id: ${req.params.id}`
-          // data: data
+          service: service.db,
+          code: 404,
+          msg: `Not found user_id: ${req.params.id}`,
+          data: []
         };
 
         // 請求已成功處理，但未返回任何內容
         res.status(200);
         res.json(msgret);
         Logger.info('msgret = %s', msgret);
+        return ;
       }
-      else{
-        let msgret = {
-          code: 200,
-          msg: `Flds_user findOne:  ${req.params.id} successfully.`,
-          data: result
-        };
-        res.json(msgret);
-        // Logger.info('msgret = %s', JSON.stringify(msgret));
-        // Logger.info('msgret = %s', msgret);
-      }
+
+      const result = result1.map(function(row){
+        // return Object.assign({}, row, { createstamp: moment(row.createstamp).format('YYYY-MM-DD HH:mm:ss'),  updatetime: moment(row.updatetime).format('YYYY-MM-DD HH:mm:ss') });
+        return Object.assign({}, row, { createtime: formatDate(row.createtime),  updatetime: formatDate(row.updatetime) });
+      });
+
+      let msgret = {
+        service: service.web,
+        code: 200,
+        msg: `Flds_user findOne:  ${req.params.id} successfully.`,
+        data: result
+      };
+      res.json(msgret);
+      console.log(msgret);
+      // Logger.info('msgret = %s', JSON.stringify(msgret));
+      // Logger.info('msgret = %s', msgret);
 
   } catch (error) {
     // console.log(error.code);
     res.status(500);
     let msgret = {
+      service: service.db,
       code: error.errno,
       msg: error.code,
-      sqlMessage: error.sqlMessage
-      // data: error
+      data:[{msg: error.sqlMessage}]
     };
     res.json(msgret);
     Logger.info('msgret = %s', JSON.stringify(msgret));
@@ -233,7 +302,7 @@ export const update = async (req, res) => {
 
   try {
       const flds_user = new Flds_user({
-        users_id : req.params.id,
+        user_id : req.params.id,
         name : req.body.name,
         state: req.body.state,
         deptid : req.body.deptid,
@@ -243,18 +312,19 @@ export const update = async (req, res) => {
       // let Flds_comp = global.userConfig.flds_comp;
       const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
       const result = await Flds_user.updateById((req.params.id), flds_user, TABLE_NAME);
-      console.log(result);
+      // console.log(result);
 
       // // if(result.result === 'not_found')
       if( isNullOrUndefined(result[0]) )
       {
         let msgret = {
-          code: 500,
-          msg: `Not found uid: ${req.params.id}`
-          // data: data
+          service: service.db,
+          code: 404,
+          msg: `Not found id: ${req.params.id}`,
+          data: []
         };
 
-        res.status(500);
+        res.status(200);
         res.json(msgret);
         Logger.info('msgret = %s', JSON.stringify(msgret));
         // Logger.info('msgret = %s', msgret);
@@ -267,9 +337,10 @@ export const update = async (req, res) => {
       else
       {
         let msgret = {
+          service: service.web,
           code: 200,
-          msg: `Flds_user updateById successfully.`,
-          data: result
+          msg: `Flds_user updateById user_id: ${flds_user.user_id} successfully.`,
+          data: []
         };
         res.json(msgret);
       }
@@ -278,11 +349,12 @@ export const update = async (req, res) => {
     // console.log(error.code);
     res.status(500);
     let msgret = {
+      service: service.db,
       code: error.errno,
       msg: error.code,
-      sqlMessage: error.sqlMessage
-      // data: error
+      data:[{msg: error.sqlMessage}]
     };
+
     res.json(msgret);
     Logger.info('msgret = %s', JSON.stringify(msgret));
     // Logger.info('msgret = %s', msgret);
@@ -296,7 +368,7 @@ export const update = async (req, res) => {
 
 // Delete a Flds_user with the specified id in the request
 // export asyncfunction deleteID(req, res) {
-  export const deleteID = async function(req, res){
+export const deleteID = async function(req, res){
   console.log('delete query = %s', req.query);
   console.log('delete body = %s', req.body);
   console.log('delete params = %s', req.params);
@@ -308,17 +380,18 @@ export const update = async (req, res) => {
     const result1 = await Flds_user.remove(req.params.id, TABLE_NAME);
     // const result = await Product.findByPn(req.params.id);
     // console.log('result1:');
-    console.log(result1);
+    // console.log(result1);
 
     // if(result1.result === 'not_found'){
     if( isNullOrUndefined(result1[0]) ) {
       let msgret = {
-        code: 400,
-        msg: `Not found users_id: ${req.params.id}`
-        // data: data
+        service: service.db,
+        code: 404,
+        msg: `Delete not found id: ${req.params.id}`,
+        data: []
       };
 
-      res.status(500);
+      res.status(200);
       res.json(msgret);
       Logger.info('msgret = %s', JSON.stringify(msgret));
       // Logger.info('msgret = %s', msgret);
@@ -331,22 +404,24 @@ export const update = async (req, res) => {
     else
     {
       let msgret = {
+        service: service.web,
         code: 200,
-        msg: `deleteOne successfully users_id: ${req.params.id}`,
-        // data: result1
+        msg: `deleteOne successfully user_id: ${req.params.id}`,
+        data: []
       };
       res.json(msgret);
     }
 
   } catch (error) {
-    // console.log(error.code);
+
     res.status(500);
     let msgret = {
+      service: service.db,
       code: error.errno,
       msg: error.code,
-      sqlMessage: error.sqlMessage
-      // data: error
+      data:[{msg: error.sqlMessage}]
     };
+
     res.json(msgret);
     Logger.info('msgret = %s', JSON.stringify(msgret));
     // Logger.info('msgret = %s', msgret);
@@ -361,7 +436,7 @@ export const update = async (req, res) => {
 
 // Delete all Flds_user from the database.
 // export asyncfunction deleteAll(req, res) {
-  export const deleteAll = async function(req, res){
+export const deleteAll = async function(req, res){
   console.log('delete query = %s', req.query);
   console.log('delete body = %s', req.body);
   console.log('delete params = %s', req.params);
@@ -383,20 +458,22 @@ export const update = async (req, res) => {
     // });
     // res.send(req);
     let msgret = {
+      service: service.web,
       code: 200,
       msg: `Deleted ${result1.affectedRows} successfully `,
-      // data: result1
+      data: []
     };
+    res.status(200);
     res.json(msgret);
 
   } catch (error) {
     // console.log(error.code);
-    res.status(500);
+    res.status(200);
     let msgret = {
+      service: service.db,
       code: error.errno,
       msg: error.code,
-      sqlMessage: error.sqlMessage
-      // data: error
+      data:[{msg: error.sqlMessage}]
     };
     res.json(msgret);
     Logger.info('msgret = %s', JSON.stringify(msgret));

@@ -25,6 +25,7 @@ router.get("/:id", flds_user.findOne);
 
 // Create a new user
 router.post("/", flds_user.create);
+router.post("/:id", flds_user.create);
 
 // Update a user with id
 router.put("/:id", flds_user.update);

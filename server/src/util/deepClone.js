@@ -14,4 +14,4 @@ function deepClone(source){
     }
   return target;
 }
-module.exports = deepClone
+export default deepClone

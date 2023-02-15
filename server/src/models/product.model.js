@@ -201,10 +201,8 @@ class Product {
   }
   static getAll(table, result) {
     return new Promise((resolve, reject) => {
-
       let query = "SELECT * FROM " + table;
       console.log("query:", query);
-
       sql.query(query, (err, res) => {
         if (err) {
           console.log("error: ", err);
@@ -216,7 +214,8 @@ class Product {
         return resolve(res);
       });
     });
-  }
+  };
+
   static findSearch(TABLE_NAME, params) {
     return new Promise((resolve, reject) => {
       console.log("params:", params);
@@ -225,40 +224,47 @@ class Product {
 
       // 檢查參數長度Object.keys(params).length
       // console.log("query:", query, params, Object.keys(params).length);
-      if (params.uid) {
-        query = query + `AND ${TABLE_NAME}.uid LIKE '${params.uid}%' `;
-        console.log("params.uid:", params.uid);
-      };
-
-      if (params.warehouse_type) {
-        query = query + `AND ${TABLE_NAME}.warehouse_type LIKE '${params.warehouse_type}%' `;
-        console.log("params.warehouse_type:", params.warehouse_type);
-      };
-
-      if (params.storage_location) {
-        query = query + `AND ${TABLE_NAME}.storage_location LIKE '${params.storage_location}%' `;
-        console.log("params.storage_location:", params.storage_location);
-      };
-
       if (params.product_no) {
         query = query + `AND ${TABLE_NAME}.product_no LIKE '${params.product_no}%' `;
         console.log("params.product_no:", params.product_no);
       };
 
-      if (params.lot_no) {
-        query = query + `AND ${TABLE_NAME}.lot_no LIKE '${params.lot_no}%' `;
-        console.log("params.lot_no:", params.lot_no);
+      if (params.product_name) {
+        query = query + `AND ${TABLE_NAME}.product_name LIKE '%${params.product_name}%' `;
+        console.log("params.product_name:", params.product_name);
       };
 
-      if (params.order_no) {
-        query = query + `AND ${TABLE_NAME}.order_no LIKE '${params.order_no}%' `;
-        console.log("params.order_no:", params.order_no);
+      if (params.classift) {
+        query = query + `AND ${TABLE_NAME}.classift LIKE '${params.classift}%' `;
+        console.log("params.classift:", params.classift);
       };
 
-      if (params.location_id) {
-        query = query + `AND ${TABLE_NAME}.location_id LIKE '${params.location_id}%' `;
-        console.log("params.location_id:", params.location_id);
+      if (params.specification) {
+        query = query + `AND ${TABLE_NAME}.specification LIKE '%${params.specification}%' `;
+        console.log("params.product_no:", params.specification);
       };
+
+      // if (params.lot_no) {
+      //   query = query + `AND ${TABLE_NAME}.lot_no LIKE '${params.lot_no}%' `;
+      //   console.log("params.lot_no:", params.lot_no);
+      // };
+
+      // if (params.order_no) {
+      //   query = query + `AND ${TABLE_NAME}.order_no LIKE '${params.order_no}%' `;
+      //   console.log("params.order_no:", params.order_no);
+      // };
+
+      // if (params.location_id) {
+      //   query = query + `AND ${TABLE_NAME}.location_id LIKE '${params.location_id}%' `;
+      //   console.log("params.location_id:", params.location_id);
+      // };
+
+      // 以時間排序資料,MySQL中ORDER BY与LIMIT一起使用（有坑）
+      // 需要确保无论带不带LIMIT都要以相同的顺序返回，那么你可以在ORDER BY中包含附加列 id，以使顺序具有确定性.
+      // query = query + `ORDER BY ${TABLE_NAME}.updatetime DESC, id DESC LIMIT 6`;
+      // query = query + `ORDER BY ${TABLE_NAME}.updatetime ASC, id ASC LIMIT 6`;
+      // query = query + `ORDER BY ${TABLE_NAME}.updatetime DESC`;
+      // query = query + `ORDER BY ${TABLE_NAME}.updatetime ASC`;
 
       if (params.limit) {
         query = query + `LIMIT ${params.limit} `;

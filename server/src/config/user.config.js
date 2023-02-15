@@ -1,5 +1,5 @@
 'use strict';
-export const flds_comp = "micro_dev01";
+export const flds_comp = "micron_dev01";
 export const flds_dept = "dept0001";
 export const flds_user = "user0001";
 export const password = "q45101524Q";
