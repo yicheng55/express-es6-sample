@@ -36,6 +36,14 @@ export const dbconfig3 = {
     PORT : "3306"
 }
 
+export const dbconfig4 = {
+    HOST : "localhost",
+    USER : "root",
+    PASSWORD : "",
+    DB : "micron_dev01",
+    PORT : "3306"
+}
+
 // export const HOST = "localhost";
 // // export const HOST = "192.168.248.34";
 // // export const HOST = "127.0.0.1";
@@ -57,4 +65,3 @@ export const dbconfig3 = {
 // export const DB = "micron_dev01";
 // // // default:3306, 5080
 // export const PORT = "3306";
-
