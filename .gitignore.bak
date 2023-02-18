@@ -3,8 +3,7 @@
 
 ## build folder
 dist-server
-dist
-#build
+build
 
 ### macOS ###
 # General
