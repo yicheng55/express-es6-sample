@@ -1,13 +1,18 @@
 'use strict';
 import { createPool } from "mysql";
-import { HOST, USER, PASSWORD, DB, PORT } from "../config/db.config.js";
-console.log(HOST);
+// import { dbconfig as dbConfig  } from "../config/db.config.js";
+import { dbconfig1 as dbConfig  } from "../config/db.config.js";
+// import { dbconfig2 as dbConfig  } from "../config/db.config.js";
+// import { dbconfig3 as dbConfig  } from "../config/db.config.js";
+
+// import { HOST, USER, PASSWORD, DB, PORT } from "../config/db.config.js";
+console.log(dbConfig);
 var connection = createPool({
-  host: HOST,
-  user: USER,
-  password: PASSWORD,
-  database: DB,
-  port:PORT
+  host: dbConfig.HOST,
+  user: dbConfig.USER,
+  password: dbConfig.PASSWORD,
+  database: dbConfig.DB,
+  port: dbConfig.PORT
 });
 
 export default connection;

@@ -26,7 +26,10 @@
   },
   "devDependencies": {
     "jest": "^29.4.1",
-    "npm-run-all": "^4.1.5"
+    "npm-run-all": "^4.1.5",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-node-externals": "^3.0.0"
   },
   "nodemonConfig": {
     "exec": "npm run dev",
@@ -49,6 +52,9 @@
     "testEnvironment": "node"
   },
   "scripts": {
+    "startweb": "node dist/index.js",
+    "buildprod": "webpack --config build/webpack.prod.conf.js",
+    "builddev": "webpack --config build/webpack.dev.conf.js",
     "start": "npm run prod",
     "start_linux": "npm run prod_linux",
     "build": "npm-run-all clean transpile",
