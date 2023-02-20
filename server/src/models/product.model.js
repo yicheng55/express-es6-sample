@@ -47,6 +47,7 @@ class Product {
       });
     });
   }
+
   static findById(id, TABLE_NAME, result) {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
@@ -70,6 +71,7 @@ class Product {
       });
     });
   }
+
   static findByOrders(id, TABLE_NAME) {
     return new Promise((resolve, reject) => {
       // let query = ("SELECT * FROM products WHERE uid = " + id);
@@ -91,6 +93,7 @@ class Product {
       });
     });
   }
+
   // Find來源單號列表
   static findByOrdersName(id, TABLE_NAME) {
     return new Promise((resolve, reject) => {
@@ -116,6 +119,7 @@ class Product {
       });
     });
   }
+
   static findByPn(id, TABLE_NAME, result) {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
@@ -139,6 +143,7 @@ class Product {
       });
     });
   }
+
   static findByLocation_id(id, result) {
     return new Promise((resolve, reject) => {
       // let query = ("SELECT * FROM products WHERE uid = " + id);
@@ -171,6 +176,7 @@ class Product {
       });
     });
   }
+
   static findByLocationID(params, TABLE_NAME) {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
@@ -199,6 +205,7 @@ class Product {
       });
     });
   }
+
   static getAll(table, result) {
     return new Promise((resolve, reject) => {
       let query = "SELECT * FROM " + table;
@@ -292,6 +299,7 @@ class Product {
       // return resolve(query);
     });
   }
+
   static QryPnStock(TABLE_NAME, params) {
     return new Promise((resolve, reject) => {
       console.log("params:", params);
@@ -351,6 +359,7 @@ class Product {
       // return resolve(query);
     });
   }
+
   static QryKuStock(TABLE_NAME, params) {
     return new Promise((resolve, reject) => {
       console.log("params:", params);
@@ -400,6 +409,7 @@ class Product {
       // return resolve(query);
     });
   }
+
   static unbound(TABLE_NAME, Flds_comp) {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
@@ -417,6 +427,7 @@ class Product {
       });
     });
   }
+
   static bind_flds_abc(TABLE_NAME, params) {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
@@ -448,6 +459,7 @@ class Product {
       });
     });
   }
+
   static bind_flds_ab(TABLE_NAME, Flds_comp) {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
@@ -467,6 +479,7 @@ class Product {
       });
     });
   }
+
   static unbound_flds_ab(TABLE_NAME, params) {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
@@ -490,6 +503,7 @@ class Product {
       });
     });
   }
+
   static updateById(id, product, TABLE_NAME) {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
@@ -514,6 +528,7 @@ class Product {
       );
     });
   }
+
   static updateByParams(params, product, TABLE_NAME) {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
@@ -551,6 +566,7 @@ class Product {
       );
     });
   }
+
   static updateById_old(id, product, TABLE_NAME) {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
@@ -580,6 +596,7 @@ class Product {
       );
     });
   }
+
   static updateById_flds_b(id, product, TABLE_NAME) {
     return new Promise((resolve, reject) => {
       // let query = `UPDATE ${TABLE_NAME} SET users_id = '${product.users_id}', location_id = '${product.location_id}',
@@ -612,6 +629,7 @@ class Product {
       );
     });
   }
+
   static removeParams(params, TABLE_NAME) {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
@@ -660,6 +678,7 @@ class Product {
       });
     });
   }
+
   static remove(id, TABLE_NAME) {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
@@ -689,6 +708,7 @@ class Product {
     });
 
   }
+
   static removeAll(TABLE_NAME) {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;
@@ -705,6 +725,7 @@ class Product {
       });
     });
   }
+
   static truncate(table, result) {
     return new Promise((resolve, reject) => {
       // let Flds_comp = global.userConfig.flds_comp;

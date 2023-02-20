@@ -93,7 +93,7 @@ export const findAll = async function(req, res) {
   try {
     const result1 = await Product.getAll(TABLE_NAME);
     // console.log('result');
-    // console.log(result1);
+    console.log(result1);
     if(isNullOrUndefined(result1[0])){
       let msgret = {
         service: service.db,
@@ -152,7 +152,7 @@ export const findSearch = async function(req, res) {
     console.log('TABLE_NAME: %s', TABLE_NAME);
     const result1 = await Product.findSearch(TABLE_NAME, req.query);
     // console.log('result1');
-    // console.log(result1);
+    console.log(result1);
     // res.json(promise2);
 
     if(isNullOrUndefined(result1[0])){
@@ -213,7 +213,7 @@ export const findOne = async function(req, res) {
 
       const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
       const result1 = await Product.findById(req.params.id, TABLE_NAME);
-
+      console.log(result1);
       if( isNullOrUndefined(result1[0]) )
       {
         let msgret = {
@@ -288,7 +288,7 @@ export const update = async function(req, res) {
     // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
     const result = await Product.updateById((req.params.id), product, TABLE_NAME);
     // console.log(result[0]);
-
+    console.log(result);
     // if(result.result === 'not_found')
     if( isNullOrUndefined(result[0]) )
     {
@@ -346,7 +346,7 @@ export const deleteID = async function(req, res) {
   try {
     const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
     const result1 = await Product.remove(req.params.id, TABLE_NAME);
-    // console.log(result1);
+    console.log(result1);
 
     if( isNullOrUndefined(result1[0]) )
     {
@@ -395,3 +395,67 @@ export const deleteID = async function(req, res) {
   }
 
 }
+
+
+export const bind_update = async(req, res) => {
+  console.log('bind_update query = %s', req.query);
+  console.log('bind_update body = %s', req.body);
+  console.log('bind_update params = %s', req.params);
+
+  try {
+    const params = {
+      order_no : req.query.order_no,
+      uid : req.params.id,
+    };
+
+    let Flds_comp = global.userConfig.flds_comp;
+    // console.log(req.query.stock);
+    let stockType = req.query.stock;
+    let TABLE_NAME ='';
+    switch (stockType) {
+      case 'input':
+          TABLE_NAME = Flds_comp+'.rfid_in_flds_abc';
+          break;
+      case 'output':
+          TABLE_NAME = Flds_comp+'.rfid_out_flds_abc';
+          break;
+      case 'adjin':
+          TABLE_NAME = Flds_comp+'.rfid_adjin_flds_abc';
+          break;
+      case 'adjout':
+          TABLE_NAME = Flds_comp+'.rfid_adjout_flds_abc';
+          break;
+      case 'pkin':
+          TABLE_NAME = Flds_comp+'.rfid_adjin_flds_abc';
+          break;
+      case 'pkout':
+          TABLE_NAME = Flds_comp+'.rfid_adjout_flds_abc';
+          break;
+      default:
+          TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
+          break;
+    }
+
+    const result3 = await Product.updateByParams(params,  req.body, TABLE_NAME);
+    console.log('result3');
+    console.log(result3[0]);
+    let msgret = {
+      code: 200,
+      msg: `Product bind_update uid:${params.uid}, order_no:${params.order_no} successfully.`,
+      // data: result1
+    };
+    res.json(msgret);
+
+  } catch (error) {
+    // console.log(error.code);
+    res.status(500);
+    let msgret = {
+      code: error.errno,
+      msg: error.code,
+      sqlMessage: error.sqlMessage
+      // data: error
+    };
+    res.json(msgret);
+    Logger.info('msgret = %s', msgret);
+  }
+};

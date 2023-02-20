@@ -9,10 +9,16 @@ import usersRouter from './routes/users';
 import catalogRouter from './src/routes/catalog.routes.js';  //Import routes for "catalog" area of site
 import productRouter from './src/routes/product.routes.js';  //Import routes for "catalog" area of site
 import flds_userRouter from './src/routes/flds_user.routes.js';
-import * as userConfig from './src/config/user.config.js';
+// import * as userConfig from './src/config/user.config.js';
+import {userconfig as userConfig} from './src/config/user.config.js';
 console.log(userConfig);
 global.userConfig = userConfig;
 // console.log(global);
+
+// Test import .json file. 在此無法使用, babel 沒有編譯到 dist-server
+// import testConfig from './src/config/test.config.json';
+// console.log(testConfig);
+
 var app = express();
 
 app.use(logger('dev'));
