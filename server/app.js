@@ -18,8 +18,8 @@ global.userConfig = userConfig;
 // console.log(global);
 
 // Test import .json file. 在此無法使用, babel 沒有編譯到 dist-server
-// import testConfig from './src/config/test.config.json';
-// console.log(testConfig);
+import testConfig from './src/config/test.config.json';
+console.log(testConfig);
 
 var app = express();
 

@@ -16,7 +16,8 @@ import {userconfig as userConfig} from "./src/config/user.config.js";
 
 // // Test import .json file.
 // import testConfig from './src/config/test.config.json' assert { type: 'json' };
-// console.log(testConfig);
+import testConfig from './src/config/test.config.json';
+console.log(testConfig);
 
 import indexRouter from "./src/routes/index.js";
 // eslint-disable-next-line no-unused-vars
@@ -87,21 +88,21 @@ app.use("/catalog/product", productRouter); // Add product routes to middleware 
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    const msg = {
-        service: service.web,
-        code: 404,
-        msg: "url not found ......",
-        data: [{msg: req.url}],
-    };
-    res.status(404);
-    res.json(msg);
+  const msg = {
+    service: service.web,
+    code: 404,
+    msg: "url not found ......",
+    data: [{msg: req.url}],
+  };
+  res.status(404);
+  res.json(msg);
 });
 
 // eslint-disable-next-line no-undef
 app.set("port", process.env.PORT || 3000);
 
 const server = app.listen(app.get("port"), function() {
-    console.log("Express server listening on port " + server.address().port);
+  console.log("Express server listening on port " + server.address().port);
 });
 
 // // *********   JavaScript 異步生成器   Test code   *******

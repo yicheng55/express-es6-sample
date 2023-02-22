@@ -62,7 +62,7 @@
     "prod": "set NODE_ENV=production && npm-run-all build server",
     "dev_linux": "NODE_ENV=development npm-run-all build server",
     "prod_linux": "NODE_ENV=production npm-run-all build server",
-    "transpile": "babel ./server --out-dir dist-server",
+    "transpile": "babel ./server -s -D --out-dir dist-server",
     "clean": "rimraf dist-server",
     "watch:dev": "nodemon",
     "watch:dev_linux": "nodemon",
