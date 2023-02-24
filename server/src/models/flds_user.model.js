@@ -28,7 +28,8 @@ class Flds_user {
         return resolve({ ...newFlds_user });
       });
     });
-  }
+  };
+
   static findById(id, TABLE_NAME) {
     return new Promise((resolve, reject) => {
       // let query = ("SELECT * FROM Flds_users WHERE user_id = " + id);
@@ -50,7 +51,7 @@ class Flds_user {
         // return resolve({ result: "not_found" }, null);
       });
     });
-  }
+  };
   static getAll(TABLE_NAME, result) {
     return new Promise((resolve, reject) => {
       let query = "SELECT * FROM " + TABLE_NAME;

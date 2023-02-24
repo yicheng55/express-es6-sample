@@ -41,18 +41,18 @@ export const create = async function(req, res){
     // let Flds_comp = global.userConfig.flds_comp;
     const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
 
-      // 第二種方式同步語法
-      const result2 = await Flds_user.create(flds_user, TABLE_NAME);
-      console.log('result2');
-      console.log(result2);
-      // res.json(result2);
-      let msgret = {
-        service: service.web,
-        code: 200,
-        msg: `Flds_user creat successfully  user_id: ${result2.user_id}`,
-        data: []
-      };
-      res.json(msgret);
+    // 第二種方式同步語法
+    const result2 = await Flds_user.create(flds_user, TABLE_NAME);
+    console.log('result2');
+    console.log(result2);
+    // res.json(result2);
+    let msgret = {
+      service: service.web,
+      code: 200,
+      msg: `Flds_user creat successfully  user_id: ${result2.user_id}`,
+      data: []
+    };
+    res.json(msgret);
 
   } catch (error) {
     // console.log(error.code);
@@ -74,7 +74,7 @@ export const create = async function(req, res){
 
   }
 
-}
+};
 
 // 同步功能實現 async/await/Promise .
 // 此(函式表達式)完全可以被箭頭函式取代
@@ -151,7 +151,7 @@ export const findAll = async (req, res) => {
     LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
     // LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerrfunc, logerrmsg);
   }
-}
+};
 
 
 // 同步功能實現 async/await/Promise .
@@ -223,7 +223,7 @@ export const findSearch = async function(req, res){
 
   }
 
-}
+};
 
 // Find a single Flds_user by Id
 // export asyncfunction findOne(req, res) {
@@ -236,41 +236,41 @@ export const findOne = async function(req, res){
   const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
 
   try {
-      let result1 = await Flds_user.findById(req.params.id, TABLE_NAME);
-      // console.log('result');
-      // console.log(result);
+    let result1 = await Flds_user.findById(req.params.id, TABLE_NAME);
+    // console.log('result');
+    // console.log(result);
 
-      if( isNullOrUndefined(result1[0]) )
-      {
-        let msgret = {
-          service: service.db,
-          code: 404,
-          msg: `Not found user_id: ${req.params.id}`,
-          data: []
-        };
-
-        // 請求已成功處理，但未返回任何內容
-        res.status(200);
-        res.json(msgret);
-        Logger.info('msgret = %s', msgret);
-        return ;
-      }
-
-      const result = result1.map(function(row){
-        // return Object.assign({}, row, { createstamp: moment(row.createstamp).format('YYYY-MM-DD HH:mm:ss'),  updatetime: moment(row.updatetime).format('YYYY-MM-DD HH:mm:ss') });
-        return Object.assign({}, row, { createtime: formatDate(row.createtime),  updatetime: formatDate(row.updatetime) });
-      });
-
+    if( isNullOrUndefined(result1[0]) )
+    {
       let msgret = {
-        service: service.web,
-        code: 200,
-        msg: `Flds_user findOne:  ${req.params.id} successfully.`,
-        data: result
+        service: service.db,
+        code: 404,
+        msg: `Not found user_id: ${req.params.id}`,
+        data: []
       };
+
+      // 請求已成功處理，但未返回任何內容
+      res.status(200);
       res.json(msgret);
-      console.log(msgret);
-      // Logger.info('msgret = %s', JSON.stringify(msgret));
-      // Logger.info('msgret = %s', msgret);
+      Logger.info('msgret = %s', msgret);
+      return ;
+    }
+
+    const result = result1.map(function(row){
+      // return Object.assign({}, row, { createstamp: moment(row.createstamp).format('YYYY-MM-DD HH:mm:ss'),  updatetime: moment(row.updatetime).format('YYYY-MM-DD HH:mm:ss') });
+      return Object.assign({}, row, { createtime: formatDate(row.createtime),  updatetime: formatDate(row.updatetime) });
+    });
+
+    let msgret = {
+      service: service.web,
+      code: 200,
+      msg: `Flds_user findOne:  ${req.params.id} successfully.`,
+      data: result
+    };
+    res.json(msgret);
+    console.log(msgret);
+    // Logger.info('msgret = %s', JSON.stringify(msgret));
+    // Logger.info('msgret = %s', msgret);
 
   } catch (error) {
     // console.log(error.code);
@@ -290,7 +290,7 @@ export const findOne = async function(req, res){
     LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
 
   }
-}
+};
 
 // Update a flds_user identified by the id in the request
 // export asyncfunction update(req, res) {
@@ -301,49 +301,49 @@ export const update = async (req, res) => {
   console.log('update params = %s', req.params);
 
   try {
-      const flds_user = new Flds_user({
-        user_id : req.params.id,
-        name : req.body.name,
-        state: req.body.state,
-        deptid : req.body.deptid,
-        password : req.body.password,
-      });
+    const flds_user = new Flds_user({
+      user_id : req.params.id,
+      name : req.body.name,
+      state: req.body.state,
+      deptid : req.body.deptid,
+      password : req.body.password,
+    });
 
-      // let Flds_comp = global.userConfig.flds_comp;
-      const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
-      const result = await Flds_user.updateById((req.params.id), flds_user, TABLE_NAME);
-      // console.log(result);
+    // let Flds_comp = global.userConfig.flds_comp;
+    const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
+    const result = await Flds_user.updateById((req.params.id), flds_user, TABLE_NAME);
+    // console.log(result);
 
-      // // if(result.result === 'not_found')
-      if( isNullOrUndefined(result[0]) )
-      {
-        let msgret = {
-          service: service.db,
-          code: 404,
-          msg: `Not found id: ${req.params.id}`,
-          data: []
-        };
+    // // if(result.result === 'not_found')
+    if( isNullOrUndefined(result[0]) )
+    {
+      let msgret = {
+        service: service.db,
+        code: 404,
+        msg: `Not found id: ${req.params.id}`,
+        data: []
+      };
 
-        res.status(200);
-        res.json(msgret);
-        Logger.info('msgret = %s', JSON.stringify(msgret));
-        // Logger.info('msgret = %s', msgret);
+      res.status(200);
+      res.json(msgret);
+      Logger.info('msgret = %s', JSON.stringify(msgret));
+      // Logger.info('msgret = %s', msgret);
 
-        let logerfunc = `export const update()`;
-        let logermsg = `${JSON.stringify(msgret)}`;
-        LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
+      let logerfunc = `export const update()`;
+      let logermsg = `${JSON.stringify(msgret)}`;
+      LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
 
-      }
-      else
-      {
-        let msgret = {
-          service: service.web,
-          code: 200,
-          msg: `Flds_user updateById user_id: ${flds_user.user_id} successfully.`,
-          data: []
-        };
-        res.json(msgret);
-      }
+    }
+    else
+    {
+      let msgret = {
+        service: service.web,
+        code: 200,
+        msg: `Flds_user updateById user_id: ${flds_user.user_id} successfully.`,
+        data: []
+      };
+      res.json(msgret);
+    }
 
   } catch (error) {
     // console.log(error.code);
@@ -364,7 +364,7 @@ export const update = async (req, res) => {
     LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
 
   }
-}
+};
 
 // Delete a Flds_user with the specified id in the request
 // export asyncfunction deleteID(req, res) {
@@ -432,7 +432,7 @@ export const deleteID = async function(req, res){
 
   }
 
-}
+};
 
 // Delete all Flds_user from the database.
 // export asyncfunction deleteAll(req, res) {
@@ -485,4 +485,4 @@ export const deleteAll = async function(req, res){
 
   }
 
-}
+};

@@ -11,6 +11,7 @@ module.exports = {
     "sourceType": "module"
   },
   "rules": {
+    beforeStatementContinuationChars: "always",
     "indent": [
       "error",
       2
@@ -24,8 +25,7 @@ module.exports = {
     //   "double"
     // ],
     "semi": [
-      "error",
-      "always"
+      "error", "always"
     ]
   }
 };

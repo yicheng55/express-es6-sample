@@ -79,7 +79,7 @@ export const create = async function(req, res) {
     let logermsg = `${JSON.stringify(msgret)}`;
     LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
   }
-}
+};
 
 // 同步功能實現 async/await/Promise .
 export const findAll = async function(req, res) {
@@ -139,7 +139,7 @@ export const findAll = async function(req, res) {
     LogErr.info('user=%s, func=%s, msg=%s', global.userConfig.flds_user, logerfunc, logermsg);
 
   }
-}
+};
 
 export const findSearch = async function(req, res) {
   console.log('findSearch query = %s', req.query);
@@ -199,7 +199,7 @@ export const findSearch = async function(req, res) {
 
   }
 
-}
+};
 
 // Find a single Product by Id
 export const findOne = async function(req, res) {
@@ -208,38 +208,38 @@ export const findOne = async function(req, res) {
   console.log('findOne params = %s', req.params);
 
   try {
-      // let Flds_comp = global.userConfig.flds_comp;
-      // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
+    // let Flds_comp = global.userConfig.flds_comp;
+    // const TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
 
-      const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
-      const result1 = await Product.findById(req.params.id, TABLE_NAME);
-      console.log(result1);
-      if( isNullOrUndefined(result1[0]) )
-      {
-        let msgret = {
-          service: service.db,
-          code: 404,
-          msg: `Not found product_no: ${req.params.id}`,
-          data: []
-        };
-        // 請求已成功處理，但未返回任何內容
-        res.status(200);
-        res.json(msgret);
-        Logger.info('msgret = %s', msgret);
-        return ;
-      }
-
-      const result = result1.map(function(row){
-        return Object.assign({}, row, { createtime: formatDate(row.createtime),  updatetime: formatDate(row.updatetime) });
-      });
-      res.status(200);
+    const TABLE_NAME = `${global.userConfig.flds_comp}.${Flds_table}`;
+    const result1 = await Product.findById(req.params.id, TABLE_NAME);
+    console.log(result1);
+    if( isNullOrUndefined(result1[0]) )
+    {
       let msgret = {
-        service: service.web,
-        code: 200,
-        msg: `find  product successfully`,
-        data: result
+        service: service.db,
+        code: 404,
+        msg: `Not found product_no: ${req.params.id}`,
+        data: []
       };
+        // 請求已成功處理，但未返回任何內容
+      res.status(200);
       res.json(msgret);
+      Logger.info('msgret = %s', msgret);
+      return ;
+    }
+
+    const result = result1.map(function(row){
+      return Object.assign({}, row, { createtime: formatDate(row.createtime),  updatetime: formatDate(row.updatetime) });
+    });
+    res.status(200);
+    let msgret = {
+      service: service.web,
+      code: 200,
+      msg: `find  product successfully`,
+      data: result
+    };
+    res.json(msgret);
 
   } catch (error) {
     // console.log(error.code);
@@ -260,7 +260,7 @@ export const findOne = async function(req, res) {
 
   }
 
-}
+};
 
 // Update a Product identified by the id in the request
 export const update = async function(req, res) {
@@ -336,7 +336,7 @@ export const update = async function(req, res) {
 
   }
 
-}
+};
 
 // Delete a Product with the specified id in the request
 export const deleteID = async function(req, res) {
@@ -394,7 +394,7 @@ export const deleteID = async function(req, res) {
 
   }
 
-}
+};
 
 
 export const bind_update = async(req, res) => {
@@ -413,27 +413,27 @@ export const bind_update = async(req, res) => {
     let stockType = req.query.stock;
     let TABLE_NAME ='';
     switch (stockType) {
-      case 'input':
-          TABLE_NAME = Flds_comp+'.rfid_in_flds_abc';
-          break;
-      case 'output':
-          TABLE_NAME = Flds_comp+'.rfid_out_flds_abc';
-          break;
-      case 'adjin':
-          TABLE_NAME = Flds_comp+'.rfid_adjin_flds_abc';
-          break;
-      case 'adjout':
-          TABLE_NAME = Flds_comp+'.rfid_adjout_flds_abc';
-          break;
-      case 'pkin':
-          TABLE_NAME = Flds_comp+'.rfid_adjin_flds_abc';
-          break;
-      case 'pkout':
-          TABLE_NAME = Flds_comp+'.rfid_adjout_flds_abc';
-          break;
-      default:
-          TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
-          break;
+    case 'input':
+      TABLE_NAME = Flds_comp+'.rfid_in_flds_abc';
+      break;
+    case 'output':
+      TABLE_NAME = Flds_comp+'.rfid_out_flds_abc';
+      break;
+    case 'adjin':
+      TABLE_NAME = Flds_comp+'.rfid_adjin_flds_abc';
+      break;
+    case 'adjout':
+      TABLE_NAME = Flds_comp+'.rfid_adjout_flds_abc';
+      break;
+    case 'pkin':
+      TABLE_NAME = Flds_comp+'.rfid_adjin_flds_abc';
+      break;
+    case 'pkout':
+      TABLE_NAME = Flds_comp+'.rfid_adjout_flds_abc';
+      break;
+    default:
+      TABLE_NAME = Flds_comp+'.rfid_ui_flds_a';
+      break;
     }
 
     const result3 = await Product.updateByParams(params,  req.body, TABLE_NAME);
